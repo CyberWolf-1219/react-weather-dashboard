@@ -1,14 +1,15 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import './App.css'
+import { useEffect, useState } from "react";
+import "./App.css";
+import Background from "./components/Background/Background";
+import Dashboard from "./components/Dashboard/Dashboard";
 
 function App() {
-
   return (
-    <div className="App">
-      
+    <div className="relative w-screen h-screen">
+      <Background />
+      <Dashboard />
     </div>
-  )
+  );
 }
 
-export default App
+export default App;
