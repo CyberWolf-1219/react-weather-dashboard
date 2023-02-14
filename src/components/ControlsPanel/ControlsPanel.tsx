@@ -1,18 +1,24 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 
 import { BsPlayCircle, BsPauseCircle } from "react-icons/bs";
 import { GrFormNext, GrFormPrevious } from "react-icons/gr";
+import { AudioFilesContext } from "../../contexts/AudioFilesContext";
 
 function ControlsPanel() {
-  const [isPlaying, setIsPlaying] = useState(false);
+  // CONNECT PLAY BTN TO CONTEXT
+  const audioFileContext = useContext(AudioFilesContext);
 
   function playButtonClickHandler(e: React.MouseEvent<HTMLButtonElement>) {
     e.preventDefault();
-    setIsPlaying((prevState) => !prevState);
+    if (audioFileContext.isPlaying) {
+      audioFileContext.pause();
+    } else {
+      audioFileContext.play();
+    }
   }
 
   return (
-    <div className="w-full h-fit p-4 bg-white/50 rounded-lg border-2 border-white">
+    <div className="grow shrink basis-[50%] w-full h-fit p-4 bg-white rounded-lg text-black">
       <label htmlFor="volume_control">Volume:</label>
       <input
         type="range"
@@ -39,10 +45,10 @@ function ControlsPanel() {
           <GrFormPrevious size={`2rem`} color={`#000000`} />
         </button>
         <button onClick={playButtonClickHandler}>
-          {isPlaying ? (
-            <BsPlayCircle size={`2rem`} color={`#000000`} />
-          ) : (
+          {audioFileContext.isPlaying ? (
             <BsPauseCircle size={`2rem`} color={`#000000`} />
+          ) : (
+            <BsPlayCircle size={`2rem`} color={`#000000`} />
           )}
         </button>
         <button>
