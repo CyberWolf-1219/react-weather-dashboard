@@ -1,6 +1,7 @@
 import React from "react";
 import WeatherDisplay from "../WeatherDisplay/WeatherDisplay";
 import MusicPlayer from "../MusicPlayer/MusicPlayer";
+import audioFilesContextProvider from "../../contexts/AudioFilesContext";
 
 function Dashboard() {
   return (
