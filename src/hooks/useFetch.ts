@@ -28,7 +28,6 @@ function useFetch(
     const jsonObj = (await response.json()) as WeatherDataPacket;
     setToday(jsonObj.current);
     setTomorrow(jsonObj.forecast.forecastday[0]);
-    console.log(jsonObj);
   }
 
   return [today as TodayWheatherData, tomorrow as WeatherForecastData];
