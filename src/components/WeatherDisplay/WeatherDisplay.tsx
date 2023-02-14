@@ -10,7 +10,6 @@ let lngLat = "";
 
 navigator.geolocation.getCurrentPosition((position) => {
   lngLat = `${position.coords.latitude},${position.coords.longitude}`;
-  console.log(lngLat);
 });
 
 function WeatherDisplay() {
@@ -19,14 +18,12 @@ function WeatherDisplay() {
   const [today, tomorrow] = useFetch(lngLat);
 
   useEffect(() => {
-    console.log(today);
-    console.log(tomorrow);
     setIcon(today?.condition.icon);
     setForecastIcon(tomorrow?.day.condition.icon);
   }, [today, tomorrow]);
 
   return (
-    <div className="grow shrink basis-[30%] w-full h-full p-4 flex flex-col items-center justify-start gap-4 border-2 border-red-500 bg-white/30 rounded-lg">
+    <div className="grow shrink basis-[30%] w-full h-full p-4 flex flex-col items-center justify-start gap-4 bg-white/30 rounded-lg">
       {/* TODAY */}
       <div className="grow shrink basis-[50%] w-full h-full p-4 flex flex-col items-center justify-start gap-2 bg-white rounded-lg">
         <h1 className="font-bold text-black">TODAY</h1>
