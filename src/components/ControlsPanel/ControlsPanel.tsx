@@ -26,6 +26,10 @@ function ControlsPanel() {
     audioFileContext.previous();
   }
 
+  function volumeSlider(e: React.ChangeEvent<HTMLInputElement>) {
+    audioFileContext.setVolume(parseFloat(e.currentTarget.value));
+  }
+
   return (
     <div className="grow shrink basis-[50%] w-full h-fit p-4 bg-white rounded-lg text-black">
       <label htmlFor="volume_control">Volume:</label>
@@ -34,8 +38,12 @@ function ControlsPanel() {
         name=""
         id=""
         min={0}
-        max={100}
-        step={1}
+        max={2}
+        step={0.01}
+        defaultValue={0.5}
+        onChange={(e) => {
+          volumeSlider(e);
+        }}
         className="w-full h-fit"
       />
       <label htmlFor="seek_control">Time:</label>

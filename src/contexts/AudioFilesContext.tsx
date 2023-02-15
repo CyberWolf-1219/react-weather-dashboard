@@ -20,6 +20,7 @@ interface IInitialValue {
   pause: () => void;
   next: () => void;
   previous: () => void;
+  setVolume: (level: number) => void;
   isPlaying: boolean;
   currentTrackTime: string;
   currentTrackLength: string;
@@ -34,6 +35,7 @@ const initialValue: IInitialValue = {
   pause: () => {},
   next: () => {},
   previous: () => {},
+  setVolume: (level: number) => {},
   isPlaying: false,
   currentTrackLength: "0:00",
   currentTrackTime: "0:00",
@@ -44,7 +46,7 @@ const AudioFilesContext = createContext(initialValue);
 interface IAudioFileContext {
   children: ReactNode | ReactNode[];
 }
-
+// =============================================================================
 function AudioFilesContextProvider(props: IAudioFileContext) {
   const [trackFiles, setTrackFiles] = useState<Array<File>>([]);
 
@@ -52,12 +54,13 @@ function AudioFilesContextProvider(props: IAudioFileContext) {
     index: number;
     file: File;
   }>();
-  const [currentTrackLength, setCurrentTrackLength] = useState("0:00");
-  const [currentTrackTime, setCurrentTrackTime] = useState("0:00");
+  const [currentTrackLength, setCurrentTrackLength] = useState("0:00:00");
+  const [currentTrackTime, setCurrentTrackTime] = useState("0:00:00");
   const currentTrackStartTime = useRef(0);
 
   const audioCtx = useRef<AudioContext>();
   const audioSourceNode = useRef<AudioBufferSourceNode>();
+  const audioGainNode = useRef<GainNode>();
   const [isPlaying, setIsPlaying] = useState(false);
 
   useEffect(() => {
@@ -74,14 +77,22 @@ function AudioFilesContextProvider(props: IAudioFileContext) {
   }, [isPlaying]);
 
   useEffect(() => {
+    // CREATE AUDIO CONTEXT
     if (!audioCtx.current) {
       audioCtx.current = new AudioContext();
     }
+    // CREATE AUDIO GAIN NODE AND CONNECT TO AUIO DESTINATION
+    if (!audioGainNode.current) {
+      audioGainNode.current = audioCtx.current.createGain();
+      audioGainNode.current.connect(audioCtx.current.destination);
+    }
 
+    // CREATING AUDIO SOURCE NODE AND CONNECTING TO AUDIO GAIN NODE
     audioSourceNode.current?.disconnect();
     audioSourceNode.current = audioCtx.current.createBufferSource();
-    audioSourceNode.current.connect(audioCtx.current.destination);
+    audioSourceNode.current.connect(audioGainNode.current);
 
+    // CONVERTING CURRENT TRACK FILE TO ARRAYBUFFER > AUDIOBUFFER & SETTING AUDIOBUFFER AS AUDIOSOURCENODE BUFFER
     currentTrack?.file
       .arrayBuffer()
       .then((arrayBuffer: ArrayBuffer) => {
@@ -129,6 +140,10 @@ function AudioFilesContextProvider(props: IAudioFileContext) {
     setCurrentTrack({ index: nextTrackIndex, file: nextTrack });
   }
 
+  function setVolume(level: number) {
+    audioGainNode.current!.gain.value = level;
+  }
+
   return (
     <AudioFilesContext.Provider
       value={{
@@ -140,6 +155,7 @@ function AudioFilesContextProvider(props: IAudioFileContext) {
         pause: pause,
         next: next,
         previous: previous,
+        setVolume: setVolume,
         isPlaying: isPlaying,
         currentTrackLength: currentTrackLength,
         currentTrackTime: currentTrackTime,
