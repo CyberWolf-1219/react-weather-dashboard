@@ -15,8 +15,8 @@ function Track(props: ITrack) {
   function play(e: React.MouseEvent<HTMLButtonElement>) {
     e.preventDefault();
     const fileToPlay = audioFileContext.trackFiles![props.index];
-    audioFileContext.setCurrentFile!(fileToPlay);
-    audioFileContext.play();
+    const currentFile = { index: props.index, file: fileToPlay };
+    audioFileContext.setCurrentFile!(currentFile);
   }
 
   return (
@@ -31,7 +31,7 @@ function Track(props: ITrack) {
               <small>Artist: {props.artist ?? "Unknown"}</small>
             </span>
             <span className="">
-              <small>Length: {props.length}</small>
+              <small>Size: {props.length}B</small>
             </span>
           </div>
         </span>

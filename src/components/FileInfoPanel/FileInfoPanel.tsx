@@ -7,11 +7,11 @@ function FileInfoPanel() {
   return (
     <div className="grow shrink basis-[50%] w-full h-full p-5 rounded-lg bg-white text-black">
       <b className="inline-block w-full h-fit max-w-[30ch] truncate overflow-hidden">
-        {audioFileContext.currentTrack?.name}
+        {audioFileContext.currentTrack?.file.name}
       </b>
-      <small>
+      <small className="inline-block">
         {audioFileContext.currentTrack
-          ? `Size:${audioFileContext.currentTrack.size}`
+          ? audioFileContext.currentTrackTime
           : null}
       </small>
     </div>

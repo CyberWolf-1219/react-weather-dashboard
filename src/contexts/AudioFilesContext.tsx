@@ -5,17 +5,22 @@ import React, {
   createContext,
   ReactNode,
 } from "react";
+import numberToTime from "../utility/numberToTime";
 
 interface IInitialValue {
   trackFiles: Array<File> | undefined;
-  currentTrack: File | undefined;
+  currentTrack: { index: number; file: File } | undefined;
   setAudioFiles: React.Dispatch<React.SetStateAction<Array<File>>> | undefined;
   setCurrentFile:
-    | React.Dispatch<React.SetStateAction<File | undefined>>
+    | React.Dispatch<
+        React.SetStateAction<{ index: number; file: File } | undefined>
+      >
     | undefined;
   play: () => void;
   pause: () => void;
   isPlaying: boolean;
+  currentTrackTime: string;
+  currentTrackLength: string;
 }
 
 const initialValue: IInitialValue = {
@@ -26,6 +31,8 @@ const initialValue: IInitialValue = {
   play: () => {},
   pause: () => {},
   isPlaying: false,
+  currentTrackLength: "0:00",
+  currentTrackTime: "0:00",
 };
 
 const AudioFilesContext = createContext(initialValue);
@@ -36,11 +43,31 @@ interface IAudioFileContext {
 
 function AudioFilesContextProvider(props: IAudioFileContext) {
   const [trackFiles, setTrackFiles] = useState<Array<File>>([]);
-  const [currentTrack, setCurrentTrack] = useState<File>();
-  const audioBuffer = useRef<AudioBuffer>();
+
+  const [currentTrack, setCurrentTrack] = useState<{
+    index: number;
+    file: File;
+  }>();
+  const [currentTrackLength, setCurrentTrackLength] = useState("0:00");
+  const [currentTrackTime, setCurrentTrackTime] = useState("0:00");
+  const currentTrackStartTime = useRef(0);
+
   const audioCtx = useRef<AudioContext>();
   const audioSourceNode = useRef<AudioBufferSourceNode>();
   const [isPlaying, setIsPlaying] = useState(false);
+
+  useEffect(() => {
+    const intetrvalId = setInterval(() => {
+      if (isPlaying) {
+        setCurrentTrackTime(numberToTime(currentTrackStartTime.current));
+        currentTrackStartTime.current += 1;
+      }
+    }, 1000);
+
+    return () => {
+      clearInterval(intetrvalId);
+    };
+  }, [isPlaying]);
 
   useEffect(() => {
     if (!audioCtx.current) {
@@ -52,17 +79,19 @@ function AudioFilesContextProvider(props: IAudioFileContext) {
     audioSourceNode.current = audioCtx.current.createBufferSource();
     audioSourceNode.current.connect(audioCtx.current.destination);
 
-    currentTrack
-      ?.arrayBuffer()
+    currentTrack?.file
+      .arrayBuffer()
       .then((arrayBuffer: ArrayBuffer) => {
         console.log(`FILE ARRAYBUFFER: `, arrayBuffer);
         return audioCtx.current!.decodeAudioData(arrayBuffer);
       })
       .then((decodedAudioBuffer: AudioBuffer | undefined) => {
-        console.log("FILE AUDIO BUFFER: ", audioBuffer);
-        audioBuffer.current = decodedAudioBuffer;
-        audioSourceNode.current!.buffer = audioBuffer?.current as AudioBuffer;
+        console.log("FILE AUDIO BUFFER: ", decodedAudioBuffer);
+        audioSourceNode.current!.buffer = decodedAudioBuffer as AudioBuffer;
+        setCurrentTrackLength(decodedAudioBuffer!.duration.toPrecision(3));
         audioSourceNode.current!.start(audioCtx.current?.currentTime);
+        setIsPlaying(true);
+        currentTrackStartTime.current = 0;
       });
   }, [currentTrack]);
 
@@ -76,6 +105,7 @@ function AudioFilesContextProvider(props: IAudioFileContext) {
     setIsPlaying(false);
     console.log(`PAUSING AUDIO FILE`);
   }
+  function next() {}
 
   return (
     <AudioFilesContext.Provider
@@ -87,6 +117,8 @@ function AudioFilesContextProvider(props: IAudioFileContext) {
         play: play,
         pause: pause,
         isPlaying: isPlaying,
+        currentTrackLength: currentTrackLength,
+        currentTrackTime: currentTrackTime,
       }}
     >
       {props.children}
