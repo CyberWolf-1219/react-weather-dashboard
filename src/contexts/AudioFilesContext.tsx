@@ -18,6 +18,8 @@ interface IInitialValue {
     | undefined;
   play: () => void;
   pause: () => void;
+  next: () => void;
+  previous: () => void;
   isPlaying: boolean;
   currentTrackTime: string;
   currentTrackLength: string;
@@ -30,6 +32,8 @@ const initialValue: IInitialValue = {
   setCurrentFile: undefined,
   play: () => {},
   pause: () => {},
+  next: () => {},
+  previous: () => {},
   isPlaying: false,
   currentTrackLength: "0:00",
   currentTrackTime: "0:00",
@@ -72,7 +76,6 @@ function AudioFilesContextProvider(props: IAudioFileContext) {
   useEffect(() => {
     if (!audioCtx.current) {
       audioCtx.current = new AudioContext();
-      console.log(audioCtx);
     }
 
     audioSourceNode.current?.disconnect();
@@ -86,7 +89,6 @@ function AudioFilesContextProvider(props: IAudioFileContext) {
         return audioCtx.current!.decodeAudioData(arrayBuffer);
       })
       .then((decodedAudioBuffer: AudioBuffer | undefined) => {
-        console.log("FILE AUDIO BUFFER: ", decodedAudioBuffer);
         audioSourceNode.current!.buffer = decodedAudioBuffer as AudioBuffer;
         setCurrentTrackLength(decodedAudioBuffer!.duration.toPrecision(3));
         audioSourceNode.current!.start(audioCtx.current?.currentTime);
@@ -98,14 +100,34 @@ function AudioFilesContextProvider(props: IAudioFileContext) {
   function play() {
     audioCtx.current?.resume();
     setIsPlaying(true);
-    console.log(`PLAYING AUDIO FILE`);
   }
+
   function pause() {
     audioCtx.current?.suspend();
     setIsPlaying(false);
-    console.log(`PAUSING AUDIO FILE`);
   }
-  function next() {}
+
+  function next() {
+    setIsPlaying(false);
+    const nextTrackIndex =
+      currentTrack!.index == trackFiles.length - 1
+        ? 0
+        : currentTrack!.index + 1;
+
+    const nextTrack = trackFiles[nextTrackIndex];
+    setCurrentTrack({ index: nextTrackIndex, file: nextTrack });
+  }
+
+  function previous() {
+    setIsPlaying(false);
+    const nextTrackIndex =
+      currentTrack!.index == 0
+        ? trackFiles.length - 1
+        : currentTrack!.index - 1;
+
+    const nextTrack = trackFiles[nextTrackIndex];
+    setCurrentTrack({ index: nextTrackIndex, file: nextTrack });
+  }
 
   return (
     <AudioFilesContext.Provider
@@ -116,6 +138,8 @@ function AudioFilesContextProvider(props: IAudioFileContext) {
         setCurrentFile: setCurrentTrack,
         play: play,
         pause: pause,
+        next: next,
+        previous: previous,
         isPlaying: isPlaying,
         currentTrackLength: currentTrackLength,
         currentTrackTime: currentTrackTime,

@@ -17,6 +17,15 @@ function ControlsPanel() {
     }
   }
 
+  function next(e: React.MouseEvent<HTMLButtonElement>) {
+    e.preventDefault();
+    audioFileContext.next();
+  }
+  function previous(e: React.MouseEvent<HTMLButtonElement>) {
+    e.preventDefault();
+    audioFileContext.previous();
+  }
+
   return (
     <div className="grow shrink basis-[50%] w-full h-fit p-4 bg-white rounded-lg text-black">
       <label htmlFor="volume_control">Volume:</label>
@@ -41,7 +50,7 @@ function ControlsPanel() {
       />
       {/* BUTTON CONTAINER */}
       <div className="w-fit h-fit mx-auto p-4 flex flex-row items-center justify-center gap-4">
-        <button>
+        <button onClick={previous}>
           <GrFormPrevious size={`2rem`} color={`#000000`} />
         </button>
         <button onClick={playButtonClickHandler}>
@@ -51,7 +60,7 @@ function ControlsPanel() {
             <BsPlayCircle size={`2rem`} color={`#000000`} />
           )}
         </button>
-        <button>
+        <button onClick={next}>
           <GrFormNext size={`2rem`} color={`#000000`} />
         </button>
       </div>
