@@ -1,3 +1,15 @@
+import uv_index_1 from "./uv_index_1.svg";
+import uv_index_2 from "./uv_index_2.svg";
+import uv_index_3 from "./uv_index_3.svg";
+import uv_index_4 from "./uv_index_4.svg";
+import uv_index_5 from "./uv_index_5.svg";
+import uv_index_6 from "./uv_index_6.svg";
+import uv_index_7 from "./uv_index_7.svg";
+import uv_index_8 from "./uv_index_8.svg";
+import uv_index_9 from "./uv_index_9.svg";
+import uv_index_10 from "./uv_index_10.svg";
+import uv_index_11 from "./uv_index_11.svg";
+
 export const icons = {
   1000: "",
 
@@ -95,3 +107,17 @@ export const icons = {
 
   1282: "",
 };
+
+export const uvIcons = [
+  uv_index_1,
+  uv_index_2,
+  uv_index_3,
+  uv_index_4,
+  uv_index_5,
+  uv_index_6,
+  uv_index_7,
+  uv_index_8,
+  uv_index_9,
+  uv_index_10,
+  uv_index_11,
+];
