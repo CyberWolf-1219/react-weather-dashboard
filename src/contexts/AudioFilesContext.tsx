@@ -5,7 +5,6 @@ import React, {
   createContext,
   ReactNode,
 } from "react";
-import numberToTime from "../utility/numberToTime";
 
 interface IInitialValue {
   trackFiles: Array<File> | undefined;
@@ -21,9 +20,10 @@ interface IInitialValue {
   next: () => void;
   previous: () => void;
   setVolume: (level: number) => void;
+  seekTo: (time: number) => void;
   isPlaying: boolean;
-  currentTrackTime: string;
-  currentTrackLength: string;
+  trackCurrentTime: number;
+  currentTrackLength: number;
 }
 
 const initialValue: IInitialValue = {
@@ -36,9 +36,10 @@ const initialValue: IInitialValue = {
   next: () => {},
   previous: () => {},
   setVolume: (level: number) => {},
+  seekTo: (time: number) => {},
   isPlaying: false,
-  currentTrackLength: "0:00",
-  currentTrackTime: "0:00",
+  currentTrackLength: 0,
+  trackCurrentTime: 0,
 };
 
 const AudioFilesContext = createContext(initialValue);
@@ -54,20 +55,21 @@ function AudioFilesContextProvider(props: IAudioFileContext) {
     index: number;
     file: File;
   }>();
-  const [currentTrackLength, setCurrentTrackLength] = useState("0:00:00");
-  const [currentTrackTime, setCurrentTrackTime] = useState("0:00:00");
-  const currentTrackStartTime = useRef(0);
+  const [currentTrackLength, setCurrentTrackLength] = useState(0);
+  const [trackCurrentTime, setTrackCurrentTime] = useState(0);
+  const currentTrackAudioBuffer = useRef<AudioBuffer>();
 
   const audioCtx = useRef<AudioContext>();
   const audioSourceNode = useRef<AudioBufferSourceNode>();
   const audioGainNode = useRef<GainNode>();
+
   const [isPlaying, setIsPlaying] = useState(false);
 
+  // FOR TIME UPDATES ON FILE INFO PANEL
   useEffect(() => {
     const intetrvalId = setInterval(() => {
       if (isPlaying) {
-        setCurrentTrackTime(numberToTime(currentTrackStartTime.current));
-        currentTrackStartTime.current += 1;
+        setTrackCurrentTime((prevVal) => (prevVal += 1));
       }
     }, 1000);
 
@@ -76,6 +78,7 @@ function AudioFilesContextProvider(props: IAudioFileContext) {
     };
   }, [isPlaying]);
 
+  // FOR INITIAL SETUP
   useEffect(() => {
     // CREATE AUDIO CONTEXT
     if (!audioCtx.current) {
@@ -100,11 +103,11 @@ function AudioFilesContextProvider(props: IAudioFileContext) {
         return audioCtx.current!.decodeAudioData(arrayBuffer);
       })
       .then((decodedAudioBuffer: AudioBuffer | undefined) => {
-        audioSourceNode.current!.buffer = decodedAudioBuffer as AudioBuffer;
-        setCurrentTrackLength(decodedAudioBuffer!.duration.toPrecision(3));
-        audioSourceNode.current!.start(audioCtx.current?.currentTime);
+        currentTrackAudioBuffer.current = decodedAudioBuffer; // STORE CURRENT TRACK'S BUFFER FOR SEEKING THE TRACK
+        audioSourceNode.current!.buffer = decodedAudioBuffer as AudioBuffer; // SET CURRENT TRACK BUFFER AS SOURCES NODE BUFFER
+        setCurrentTrackLength(Math.floor(decodedAudioBuffer!.duration));
+        audioSourceNode.current!.start(0, 0);
         setIsPlaying(true);
-        currentTrackStartTime.current = 0;
       });
   }, [currentTrack]);
 
@@ -144,6 +147,22 @@ function AudioFilesContextProvider(props: IAudioFileContext) {
     audioGainNode.current!.gain.value = level;
   }
 
+  function seek(seekTo: number) {
+    console.log(seekTo);
+    // DISCONNECT CURRENT SOURCE NODE
+    audioSourceNode.current!.disconnect();
+    // CREATE NEW BUFFERSOURCENODE
+    audioSourceNode.current = audioCtx.current!.createBufferSource();
+    // ADD CURRENT TRACK BUFFER TO SOURCE NODE
+    audioSourceNode.current!.buffer = currentTrackAudioBuffer.current!;
+    // CONNECTE SOURCE NODE TO AUDIO GAIN NODE
+    audioSourceNode.current.connect(audioGainNode.current!);
+    // START TRACK AT SPECIFIED TIME
+    audioSourceNode.current!.start(0, seekTo);
+    // SET TIME ON CURRENT TIME DISPLAY
+    setTrackCurrentTime(seekTo);
+  }
+
   return (
     <AudioFilesContext.Provider
       value={{
@@ -156,9 +175,10 @@ function AudioFilesContextProvider(props: IAudioFileContext) {
         next: next,
         previous: previous,
         setVolume: setVolume,
+        seekTo: seek,
         isPlaying: isPlaying,
         currentTrackLength: currentTrackLength,
-        currentTrackTime: currentTrackTime,
+        trackCurrentTime: trackCurrentTime,
       }}
     >
       {props.children}

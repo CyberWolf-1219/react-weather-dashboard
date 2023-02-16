@@ -39,7 +39,7 @@ function Playlist() {
         onChange={(e) => {
           onTrackSelect(e);
         }}
-        className="shrink grow basis-[8%] w-full max-h-[50px] h-fit p-2 border-b-2 border-gray-500 text-gray-500"
+        className="shrink grow basis-[15%] w-full max-h-[50px] h-fit pb-2 border-b-2 border-gray-500 text-gray-500"
       />
       {/* TRACK CONTAINER */}
       <div className="shrink grow basis-[90%] w-full h-full max-h-[280px] overflow-y-scroll">

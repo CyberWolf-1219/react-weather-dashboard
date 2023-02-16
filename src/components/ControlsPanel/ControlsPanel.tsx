@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 
 import { BsPlayCircle, BsPauseCircle } from "react-icons/bs";
 import { GrFormNext, GrFormPrevious } from "react-icons/gr";
@@ -6,7 +6,6 @@ import { AudioFilesContext } from "../../contexts/AudioFilesContext";
 import Card from "../Card/Card";
 
 function ControlsPanel() {
-  // CONNECT PLAY BTN TO CONTEXT
   const audioFileContext = useContext(AudioFilesContext);
 
   function playButtonClickHandler(e: React.MouseEvent<HTMLButtonElement>) {
@@ -31,6 +30,11 @@ function ControlsPanel() {
     audioFileContext.setVolume(parseFloat(e.currentTarget.value));
   }
 
+  function seek(e: React.FormEvent<HTMLInputElement>) {
+    console.log(e.currentTarget.value);
+    audioFileContext.seekTo(parseFloat(e.currentTarget.value));
+  }
+
   return (
     <Card width="full" height="fit" classes="grow shrink basis-[50%]">
       <label htmlFor="volume_control">Volume:</label>
@@ -41,7 +45,7 @@ function ControlsPanel() {
         min={0}
         max={2}
         step={0.01}
-        defaultValue={0.5}
+        defaultValue={1}
         onChange={(e) => {
           volumeSlider(e);
         }}
@@ -52,9 +56,13 @@ function ControlsPanel() {
         type="range"
         name=""
         id=""
-        max={100}
+        max={audioFileContext.currentTrackLength}
         min={0}
-        step={0.1}
+        step={1}
+        value={audioFileContext.trackCurrentTime}
+        onInput={(e) => {
+          seek(e);
+        }}
         className="w-full h-fit"
       />
       {/* BUTTON CONTAINER */}
