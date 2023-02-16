@@ -1,11 +1,12 @@
 import React, { useContext } from "react";
 import { AudioFilesContext } from "../../contexts/AudioFilesContext";
+import Card from "../Card/Card";
 
 function FileInfoPanel() {
   const audioFileContext = useContext(AudioFilesContext);
 
   return (
-    <div className="grow shrink basis-[50%] w-full h-full p-5 rounded-lg bg-white text-black">
+    <Card width="full" height="full" classes="grow shrink basis-[50%]">
       <b className="block w-full h-fit max-w-[30ch] truncate overflow-hidden">
         {audioFileContext.currentTrack?.file.name}
       </b>
@@ -14,7 +15,7 @@ function FileInfoPanel() {
           ? audioFileContext.currentTrackTime
           : null}
       </small>
-    </div>
+    </Card>
   );
 }
 

@@ -6,7 +6,7 @@ import FileInfoPanel from "../FileInfoPanel/FileInfoPanel";
 
 function MusicPlayer() {
   return (
-    <div className="grow shrink basis-[65%] w-full h-full p-4 flex flex-col items-center justify-start gap-4  bg-white/30 rounded-lg">
+    <div className="grow shrink basis-[65%] w-full h-full p-4 flex flex-col items-center justify-start gap-4  bg-transparent rounded-lg">
       {/* TOP COMPONENTS WRAPPER */}
       <div className="w-full h-fit flex flex-row items-end justify-start gap-4">
         {/* AUDIO VISUALIZER */}

@@ -1,7 +1,8 @@
 import React from "react";
+import Card from "../Card/Card";
 
 function AudioVisualizer() {
-  return <div className="w-full h-full bg-white rounded-lg"></div>;
+  return <Card width="auto" height="full" classes="aspect-[1/1]"></Card>;
 }
 
 export default AudioVisualizer;

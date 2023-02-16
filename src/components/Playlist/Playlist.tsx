@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState, useContext } from "react";
 import Track from "../Track/Track";
 import { AudioFilesContext } from "../../contexts/AudioFilesContext";
+import Card from "../Card/Card";
 
 function Playlist() {
   const audioFileContext = useContext(AudioFilesContext);
@@ -23,7 +24,11 @@ function Playlist() {
   }
 
   return (
-    <div className="grow shrink basis-[50%] w-auto h-full flex flex-col items-start justify-start bg-white rounded-lg ">
+    <Card
+      width="full"
+      height="full"
+      classes="grow shrink flex flex-col items-start justify-start"
+    >
       <input
         ref={fileInput}
         type="file"
@@ -50,7 +55,7 @@ function Playlist() {
           );
         })}
       </div>
-    </div>
+    </Card>
   );
 }
 

@@ -3,6 +3,7 @@ import React, { useContext, useState } from "react";
 import { BsPlayCircle, BsPauseCircle } from "react-icons/bs";
 import { GrFormNext, GrFormPrevious } from "react-icons/gr";
 import { AudioFilesContext } from "../../contexts/AudioFilesContext";
+import Card from "../Card/Card";
 
 function ControlsPanel() {
   // CONNECT PLAY BTN TO CONTEXT
@@ -31,7 +32,7 @@ function ControlsPanel() {
   }
 
   return (
-    <div className="grow shrink basis-[50%] w-full h-fit p-4 bg-white rounded-lg text-black">
+    <Card width="full" height="fit" classes="grow shrink basis-[50%]">
       <label htmlFor="volume_control">Volume:</label>
       <input
         type="range"
@@ -72,7 +73,7 @@ function ControlsPanel() {
           <GrFormNext size={`2rem`} color={`#000000`} />
         </button>
       </div>
-    </div>
+    </Card>
   );
 }
 

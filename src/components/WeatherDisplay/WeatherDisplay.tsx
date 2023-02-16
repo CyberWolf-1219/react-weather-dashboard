@@ -5,6 +5,7 @@ import windIcon from "../../assets/wind.svg";
 import humidityIcon from "../../assets/humidity.svg";
 import uvIcon from "../../assets/uv-index.svg";
 import windsockIcon from "../../assets/windsock.svg";
+import Card from "../Card/Card";
 
 let lngLat = "";
 
@@ -23,9 +24,13 @@ function WeatherDisplay() {
   }, [today, tomorrow]);
 
   return (
-    <div className="grow shrink basis-[30%] w-full h-full p-4 flex flex-col items-center justify-start gap-4 bg-white/30 rounded-lg">
+    <div className="grow shrink basis-[30%] w-full h-full p-4 flex flex-col items-center justify-start gap-4 bg-transparent rounded-lg">
       {/* TODAY */}
-      <div className="grow shrink basis-[50%] w-full h-full p-4 flex flex-col items-center justify-start gap-2 bg-white rounded-lg">
+      <Card
+        width="full"
+        height="full"
+        classes="grow shrink flex flex-col items-center justify-start gap-2 "
+      >
         <h1 className="font-bold text-black">TODAY</h1>
         {/* ICON */}
         <div>
@@ -81,9 +86,13 @@ function WeatherDisplay() {
             />
           </div>
         </div>
-      </div>
+      </Card>
       {/* TOMMOROW */}
-      <div className="grow shrink basis-[50%] w-full h-full p-4 flex flex-col items-center justify-start gap-2 bg-white rounded-lg">
+      <Card
+        width="full"
+        height="full"
+        classes="grow shrink gap-2 flex flex-col items-center justify-start"
+      >
         <h1 className="font-bold text-black">TOMORROW</h1>
         {/* ICON */}
         <div>
@@ -130,7 +139,7 @@ function WeatherDisplay() {
             />
           </div>
         </div>
-      </div>
+      </Card>
     </div>
   );
 }
