@@ -1,6 +1,7 @@
 import React, { useContext } from "react";
 import { BsPlayCircle } from "react-icons/bs";
 import { AudioFilesContext } from "../../contexts/AudioFilesContext";
+import Card from "../Card/Card";
 
 interface ITrack {
   index: number;
@@ -20,7 +21,7 @@ function Track(props: ITrack) {
   }
 
   return (
-    <div className="w-full h-fit p-2  text-black bg-white">
+    <Card width="full" height="fit" classes="bg-white/5 text-white">
       <div className="flex flex-row items-center justify-between">
         <span className="grow shrink basis-[90%] flex flex-col">
           <b className="w-full max-w-[40ch] h-fit min-h-[30px] overflow-hidden truncate">
@@ -36,13 +37,16 @@ function Track(props: ITrack) {
           </div>
         </span>
         <span className="grow shrink basis-[10%]">
-          <button onClick={play}>
+          <button
+            onClick={play}
+            className="w-fit h-fit p-2 rounded-full bg-white/30 backdrop-blur-sm shadow-[0px_0px_8px_1px] shadow-white/50"
+          >
             <BsPlayCircle size={`2.5rem`} color="black" />
           </button>
         </span>
       </div>
       <hr className="w-full h-auto border-[1.5px] " />
-    </div>
+    </Card>
   );
 }
 

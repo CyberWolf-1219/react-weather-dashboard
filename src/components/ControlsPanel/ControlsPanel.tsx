@@ -67,18 +67,30 @@ function ControlsPanel() {
       />
       {/* BUTTON CONTAINER */}
       <div className="w-fit h-fit mx-auto p-4 flex flex-row items-center justify-center gap-4">
-        <button onClick={previous}>
-          <GrFormPrevious size={`2rem`} color={`#000000`} />
+        {/* PREVIOUS */}
+        <button
+          onClick={previous}
+          className="w-fit h-fit p-2 rounded-full bg-white/30 backdrop-blur-sm shadow-[0px_0px_8px_1px] shadow-white/50 hover:scale-105 transition-transform"
+        >
+          <GrFormPrevious size={`2rem`} color={"#ffffff"} />
         </button>
-        <button onClick={playButtonClickHandler}>
+        {/* PLAY PAUSE */}
+        <button
+          onClick={playButtonClickHandler}
+          className="w-fit h-fit p-2 rounded-full bg-white/30 backdrop-blur-sm shadow-[0px_0px_8px_1px] shadow-white/50 hover:scale-105 transition-transform"
+        >
           {audioFileContext.isPlaying ? (
-            <BsPauseCircle size={`2rem`} color={`#000000`} />
+            <BsPauseCircle size={`2rem`} color={"#ffffff"} />
           ) : (
-            <BsPlayCircle size={`2rem`} color={`#000000`} />
+            <BsPlayCircle size={`2rem`} color={"#ffffff"} />
           )}
         </button>
-        <button onClick={next}>
-          <GrFormNext size={`2rem`} color={`#000000`} />
+        {/* NEXT */}
+        <button
+          onClick={next}
+          className="w-fit h-fit p-2 rounded-full bg-white/30 backdrop-blur-sm shadow-[0px_0px_8px_1px] shadow-white/50 hover:scale-105 transition-transform"
+        >
+          <GrFormNext size={`2rem`} color={"#ffffff"} />
         </button>
       </div>
     </Card>
