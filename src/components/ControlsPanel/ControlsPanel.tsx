@@ -8,8 +8,16 @@ import Card from "../Card/Card";
 function ControlsPanel() {
   const audioFileContext = useContext(AudioFilesContext);
 
+  useEffect(() => {
+    console.log(audioFileContext.currentTrack);
+  });
+
   function playButtonClickHandler(e: React.MouseEvent<HTMLButtonElement>) {
     e.preventDefault();
+    if (!audioFileContext.currentTrack) {
+      return;
+    }
+
     if (audioFileContext.isPlaying) {
       audioFileContext.pause();
     } else {
@@ -19,10 +27,18 @@ function ControlsPanel() {
 
   function next(e: React.MouseEvent<HTMLButtonElement>) {
     e.preventDefault();
+    if (!audioFileContext.currentTrack) {
+      return;
+    }
+
     audioFileContext.next();
   }
   function previous(e: React.MouseEvent<HTMLButtonElement>) {
     e.preventDefault();
+    if (!audioFileContext.currentTrack) {
+      return;
+    }
+
     audioFileContext.previous();
   }
 
@@ -31,7 +47,6 @@ function ControlsPanel() {
   }
 
   function seek(e: React.FormEvent<HTMLInputElement>) {
-    console.log(e.currentTarget.value);
     audioFileContext.seekTo(parseFloat(e.currentTarget.value));
   }
 
