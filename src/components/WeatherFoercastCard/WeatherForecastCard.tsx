@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Card from "../Card/Card";
 import Chip from "../Chip/Chip";
 
@@ -7,9 +7,11 @@ import windIcon from "../../assets/wind.svg";
 import humidityIcon from "../../assets/humidity.svg";
 import uvIcon from "../../assets/uv-index.svg";
 
+import { icons } from "../../assets";
+
 interface IWeatherForecastCard {
   date: string;
-  conditionIcon: string;
+  conditionCode: number;
   temp: number;
   humidity: number;
   uvIndex: number;
@@ -17,6 +19,13 @@ interface IWeatherForecastCard {
 }
 
 function WeatherForecastCard(props: IWeatherForecastCard) {
+  const [icon, setIcon] = useState("");
+
+  useEffect(() => {
+    const conditionIconArray = icons[props.conditionCode];
+    setIcon(conditionIconArray[0]);
+  }, []);
+
   return (
     <Card
       width="full"
@@ -29,10 +38,7 @@ function WeatherForecastCard(props: IWeatherForecastCard) {
         {/* ICON */}
         <div>
           <picture>
-            <img
-              src={props.conditionIcon}
-              className="aspect-[1/1] w-[100px] h-auto"
-            />
+            <img src={icon} className="aspect-[1/1] w-[100px] h-auto" />
           </picture>
         </div>
         {/* DATA */}

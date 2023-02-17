@@ -10,6 +10,7 @@ import windsockIcon from "../../assets/windsock.svg";
 
 interface IWeatherCard {
   icon: string;
+  condition: string;
   temp: string;
   windDir: string;
   windSpeed: number;
@@ -28,9 +29,10 @@ function CurrentWeatherCard(props: IWeatherCard) {
       {/* ICON */}
       <div>
         <picture>
-          <img src={props.icon} className="aspect-[1/1] w-[100px] h-auto" />
+          <img src={props.icon} className="aspect-[1/1] w-[200px] h-auto" />
         </picture>
       </div>
+      <p>{props.condition}</p>
       {/* DATA */}
       <div className="w-full h-fit flex flex-row items-start justify-center gap-2 flex-wrap">
         {/* TEMPARATURE */}

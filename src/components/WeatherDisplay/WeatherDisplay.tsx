@@ -4,7 +4,7 @@ import CurrentWeatherCard from "../CurrentWeatherCard/CurrentWeatherCard";
 import useGetWeather from "../../hooks/useGetWeather";
 import WeatherForecastCard from "../WeatherFoercastCard/WeatherForecastCard";
 
-import { uvIcons } from "../../assets";
+import { icons } from "../../assets";
 
 let lngLat: Array<number> = [];
 navigator.geolocation.getCurrentPosition((position) => {
@@ -17,8 +17,16 @@ function WeatherDisplay() {
   const [today, forecasts] = useGetWeather(lngLat);
 
   useEffect(() => {
-    if (today?.condition.code == 1000) {
-      setIcon(uvIcons[today?.uv - 1]);
+    const conditionCode = today?.condition.code;
+
+    if (conditionCode) {
+      const conditionIconsArray = icons[conditionCode];
+      console.log(conditionIconsArray);
+      if (today?.is_day) {
+        setIcon(conditionIconsArray[0]);
+      } else {
+        setIcon(conditionIconsArray[1]);
+      }
     }
   }, [today, forecasts]);
 
@@ -27,6 +35,7 @@ function WeatherDisplay() {
       {/* TODAY */}
       <CurrentWeatherCard
         icon={icon!}
+        condition={today?.condition.text}
         temp={today?.temp_c ?? ""}
         humidity={today?.humidity ?? ""}
         uvIndex={today?.uv ?? ""}
@@ -39,7 +48,7 @@ function WeatherDisplay() {
           <WeatherForecastCard
             key={`$weatherForecast_${Math.random()}`}
             date={forecastObj.date}
-            conditionIcon={forecastObj.day.condition.icon}
+            conditionCode={forecastObj.day.condition.code}
             temp={forecastObj.day.avgtemp_c}
             humidity={forecastObj.day.avghumidity}
             uvIndex={forecastObj.day.uv}

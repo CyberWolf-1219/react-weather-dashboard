@@ -10,102 +10,214 @@ import uv_index_9 from "./uv_index_9.svg";
 import uv_index_10 from "./uv_index_10.svg";
 import uv_index_11 from "./uv_index_11.svg";
 
-export const icons = {
-  1000: "",
+import clearDay from "./clear-day.svg";
+import clearNight from "./clear-night.svg";
+import partlyCloudyDay from "./partly-cloudy-day.svg";
+import partlyCloudyNight from "./partly-cloudy-night.svg";
+import cloudyDay from "./cloudy.svg";
+import cloudyNight from "./cloudy.svg";
+import overcastDay from "./overcast-day.svg";
+import overcastNight from "./overcast-night.svg";
+import mistyDay from "./mist.svg";
+import mistyNight from "./mist.svg";
+import patchyRainDay from "./partly-cloudy-day-drizzle.svg";
+import patchyRainNight from "./partly-cloudy-night-drizzle.svg";
+import moderateOrHeavySnowShowerDay from "./partly-cloudy-day-snow.svg";
+import moderateOrHeavySnowShowerNight from "./partly-cloudy-night-snow.svg";
+import patchySnowDay from "./partly-cloudy-day-snow.svg";
+import patchySnowNight from "./partly-cloudy-night-snow.svg";
+import patchySleetDay from "./partly-cloudy-day-sleet.svg";
+import patchySleetNight from "./partly-cloudy-night-sleet.svg";
+import patchyFreezinDrizzleDay from "./partly-cloudy-day-drizzle.svg";
+import patchyFreezingDrizzleNight from "./partly-cloudy-night-drizzle.svg";
+import thunderOutbreakDay from "./thunderstorms-day.svg";
+import thunderOutbreakNight from "./thunderstorms-night.svg";
+import blowingSnowDay from "./snow.svg";
+import blowingSnowNight from "./snow.svg";
+import blizzardDay from "./snow.svg";
+import blizzardNight from "./snow.svg";
+import fogDay from "./fog-day.svg";
+import fogNight from "./fog-night.svg";
+import freezingFogDay from "./fog-day.svg";
+import freezingFogNight from "./fog-night.svg";
+import patchyLightDrizzleDay from "./partly-cloudy-day-drizzle.svg";
+import patchyLightDrizzleNight from "./partly-cloudy-night-drizzle.svg";
+import LightDrizzleDay from "./partly-cloudy-day-drizzle.svg";
+import LightDrizzleNight from "./partly-cloudy-night-drizzle.svg";
+import freezingDrizzleDay from "./partly-cloudy-day-drizzle.svg";
+import freezingDrizzleNight from "./partly-cloudy-night-drizzle.svg";
+import heavyFreezingDrizzleDay from "./partly-cloudy-day-drizzle.svg";
+import heavyFreezingDrizzleNight from "./partly-cloudy-night-drizzle.svg";
+import patchyLightRainDay from "./partly-cloudy-day-drizzle.svg";
+import patchyLightRainNight from "./partly-cloudy-night-drizzle.svg";
+import lightRainDay from "./partly-cloudy-day-drizzle.svg";
+import lightRainNight from "./partly-cloudy-night-drizzle.svg";
+import moderateRainDay from "./partly-cloudy-day-rain.svg";
+import moderateRainNight from "./partly-cloudy-night-rain.svg";
+import moderateRainAtTimesDay from "./partly-cloudy-day-rain.svg";
+import moderateRainAtTimesNight from "./partly-cloudy-night-rain.svg";
+import heavyRainDay from "./raindrops.svg";
+import heavyRainNight from "./raindrops.svg";
+import heavyRainAtTimesDay from "./raindrops.svg";
+import heavyRainAtTimesNight from "./raindrops.svg";
+import LightFreezingRainDay from "./partly-cloudy-day-drizzle.svg";
+import LightFreezingRainNight from "./partly-cloudy-night-drizzle.svg";
+import moderateHeavyFreezingRainDay from "./raindrop.svg";
+import moderateHeavyFreezingRainNight from "./raindrop.svg";
+import lightSleetDay from "./partly-cloudy-day-sleet.svg";
+import lightSleetNight from "./partly-cloudy-night-sleet.svg";
+import moderateOrHeavySleetDay from "./sleet.svg";
+import moderateOrHeavySleetNight from "./sleet.svg";
+import patchyLightSnowDay from "./partly-cloudy-day-snow.svg";
+import patchyLightSnowNight from "./partly-cloudy-night-snow.svg";
+import lightSnowDay from "./snow.svg";
+import lightSnowNight from "./snow.svg";
+import patchyModerateSnowDay from "./snow.svg";
+import patchyModerateSnowNight from "./snow.svg";
+import moderateSnowDay from "./snow.svg";
+import moderateSnowNight from "./snow.svg";
+import patchyHeavySnowDay from "./snowflake.svg";
+import patchyHeavySnowNight from "./snowflake.svg";
+import heavySnowDay from "./snowflake.svg";
+import heavySnowNight from "./snowflake.svg";
+import hailDay from "./partly-cloudy-day-hail.svg";
+import hailNight from "./partly-cloudy-night-hail.svg";
+import lightRainShowerDay from "./partly-cloudy-day-drizzle.svg";
+import lightRainShowerNight from "./partly-cloudy-night-drizzle.svg";
+import moderateOrHeavyRainDay from "./raindrop.svg";
+import moderateOrHeavyRainNight from "./raindrop.svg";
+import moderateOrHeavyRainShowerDay from "./raindrop.svg";
+import moderateOrHeavyRainShowerNight from "./raindrop.svg";
+import torrentialRainShowerDay from "./raindrop.svg";
+import torrentialRainShowerNight from "./raindrop.svg";
+import lightSleetShowerDay from "./partly-cloudy-day-sleet.svg";
+import lightSleetShowerNight from "./partly-cloudy-night-sleet.svg";
+import moderateOrHeavySleetShowerDay from "./partly-cloudy-day-sleet.svg";
+import moderateOrHeavySleetShowerNight from "./partly-cloudy-night-sleet.svg";
+import lightSnowShowerDay from "./partly-cloudy-day-snow.svg";
+import lightSnowShowerNight from "./partly-cloudy-night-snow.svg";
+import moderateOrHeaveSnowShowerDay from "./partly-cloudy-day-snow.svg";
+import moderateOrHeaveSnowShowerNight from "./partly-cloudy-Night-snow.svg";
+import icePelletsDay from "./partly-cloudy-day-hail.svg";
+import icePelletsNight from "./partly-cloudy-night-hail.svg";
+import lightShowersOfIcePelletsDay from "./partly-cloudy-day-hail.svg";
+import lightShowersOfIcePelletsNight from "./partly-cloudy-night-hail.svg";
+import moderateOrHeavyShowersOfIcePelletsDay from "./partly-cloudy-day-hail.svg";
+import moderateOrHeavyShowersOfIcePelletsNight from "./partly-cloudy-night-hail.svg";
+import patchyRainWithThunderDay from "./thunderstorms-day-rain.svg";
+import patchyRainWithThunderNight from "./thunderstorms-night-rain.svg";
+import moderateOrHeavyRainWithThunderDay from "./thunderstorms-day-rain.svg";
+import moderateOrHeavyRainWithThunderNight from "./thunderstorms-night-rain.svg";
+import patchyLightSnowWithThunderDay from "./thunderstorms-day-snow.svg";
+import patchyLightSnowWithThunderNight from "./thunderstorms-night-snow.svg";
+import moderateOrHeavySnowWithThunderDay from "./thunderstorms-day-snow.svg";
+import moderateOrHeavySnowWithThunderNight from "./thunderstorms-night-snow.svg";
 
-  1003: "",
+export const icons: { [key: number]: Array<string> } = {
+  1000: [clearDay, clearNight],
 
-  1006: "",
+  1003: [partlyCloudyDay, partlyCloudyNight],
 
-  1009: "",
+  1006: [cloudyDay, cloudyNight],
 
-  1030: "",
+  1009: [overcastDay, overcastNight],
 
-  1063: "",
+  1030: [mistyDay, mistyNight],
 
-  1066: "",
+  1063: [patchyRainDay, patchyRainNight],
 
-  1069: "",
+  1066: [patchySnowDay, patchySnowNight],
 
-  1072: "",
+  1069: [patchySleetDay, patchySleetNight],
 
-  1087: "",
+  1072: [patchyFreezinDrizzleDay, patchyFreezingDrizzleNight],
 
-  1114: "",
+  1087: [thunderOutbreakDay, thunderOutbreakNight],
 
-  1117: "",
+  1114: [blowingSnowDay, blowingSnowNight],
 
-  1135: "",
+  1117: [blizzardDay, blizzardNight],
 
-  1147: "",
+  1135: [fogDay, fogNight],
 
-  1150: "",
+  1147: [freezingFogDay, freezingFogNight],
 
-  1153: "",
+  1150: [patchyLightDrizzleDay, patchyLightDrizzleNight],
 
-  1168: "",
+  1153: [LightDrizzleDay, LightDrizzleNight],
 
-  1171: "",
+  1168: [freezingDrizzleDay, freezingDrizzleNight],
 
-  1180: "",
+  1171: [heavyFreezingDrizzleDay, heavyFreezingDrizzleNight],
 
-  1183: "",
+  1180: [patchyLightRainDay, patchyLightRainNight],
 
-  1186: "",
+  1183: [lightRainDay, lightRainNight],
 
-  1189: "",
+  1186: [moderateRainAtTimesDay, moderateRainAtTimesNight],
 
-  1192: "",
+  1189: [moderateRainDay, moderateRainNight],
 
-  1195: "",
+  1192: [heavyRainAtTimesDay, heavyRainAtTimesNight],
 
-  1198: "",
+  1195: [heavyRainDay, heavyRainNight],
 
-  1201: "",
+  1198: [LightFreezingRainDay, LightFreezingRainNight],
 
-  1204: "",
+  1201: [moderateOrHeavyRainDay, moderateOrHeavyRainNight],
 
-  1207: "",
+  1204: [lightSleetDay, lightSleetNight],
 
-  1210: "",
+  1207: [moderateOrHeavySleetDay, moderateOrHeavySleetNight],
 
-  1213: "",
+  1210: [patchyLightSnowDay, patchyLightSnowNight],
 
-  1216: "",
+  1213: [lightSnowDay, lightSnowNight],
 
-  1219: "",
+  1216: [patchyModerateSnowDay, patchyModerateSnowNight],
 
-  1222: "",
+  1219: [moderateSnowDay, moderateSnowNight],
 
-  1225: "",
+  1222: [patchyHeavySnowDay, patchyHeavySnowNight],
 
-  1237: "",
+  1225: [heavySnowDay, heavySnowNight],
 
-  1240: "",
+  1237: [icePelletsDay, icePelletsNight],
 
-  1243: "",
+  1240: [lightRainShowerDay, lightRainShowerNight],
 
-  1246: "",
+  1243: [moderateOrHeavyRainShowerDay, moderateOrHeavyRainShowerNight],
 
-  1249: "",
+  1246: [torrentialRainShowerDay, torrentialRainShowerNight],
 
-  1252: "",
+  1249: [lightSleetShowerDay, lightSleetShowerNight],
 
-  1255: "",
+  1252: [moderateOrHeavySleetShowerDay, moderateOrHeavySleetShowerNight],
 
-  1258: "",
+  1255: [lightSnowShowerDay, lightSnowShowerNight],
 
-  1261: "",
+  1258: [moderateOrHeavySnowShowerDay, moderateOrHeaveSnowShowerNight],
 
-  1264: "",
+  1261: [lightShowersOfIcePelletsDay, lightShowersOfIcePelletsNight],
 
-  1273: "",
+  1264: [
+    moderateOrHeavyShowersOfIcePelletsDay,
+    moderateOrHeavyShowersOfIcePelletsNight,
+  ],
 
-  1276: "",
+  1273: [patchyLightRainDay, patchyLightRainNight],
 
-  1279: "",
+  1276: [
+    moderateOrHeavyRainWithThunderDay,
+    moderateOrHeavyRainWithThunderNight,
+  ],
 
-  1282: "",
+  1279: [patchyLightSnowWithThunderDay, patchyLightSnowWithThunderNight],
+
+  1282: [
+    moderateOrHeavySnowWithThunderDay,
+    moderateOrHeavySnowWithThunderNight,
+  ],
 };
 
 export const uvIcons = [
