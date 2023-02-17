@@ -24,6 +24,7 @@ interface IInitialValue {
   isPlaying: boolean;
   trackCurrentTime: number;
   currentTrackLength: number;
+  getFrequencyData: (fftSize: number) => Uint8Array;
 }
 
 const initialValue: IInitialValue = {
@@ -40,6 +41,9 @@ const initialValue: IInitialValue = {
   isPlaying: false,
   currentTrackLength: 0,
   trackCurrentTime: 0,
+  getFrequencyData: (fftSize: number) => {
+    return new Uint8Array();
+  },
 };
 
 const AudioFilesContext = createContext(initialValue);
@@ -50,11 +54,11 @@ interface IAudioFileContext {
 // =============================================================================
 function AudioFilesContextProvider(props: IAudioFileContext) {
   const [trackFiles, setTrackFiles] = useState<Array<File>>([]);
-
   const [currentTrack, setCurrentTrack] = useState<{
     index: number;
     file: File;
   }>();
+
   const [currentTrackLength, setCurrentTrackLength] = useState(0);
   const [trackCurrentTime, setTrackCurrentTime] = useState(0);
   const currentTrackAudioBuffer = useRef<AudioBuffer>();
@@ -62,6 +66,7 @@ function AudioFilesContextProvider(props: IAudioFileContext) {
   const audioCtx = useRef<AudioContext>();
   const audioSourceNode = useRef<AudioBufferSourceNode>();
   const audioGainNode = useRef<GainNode>();
+  const audioAnalyzerNode = useRef<AnalyserNode>();
 
   const [isPlaying, setIsPlaying] = useState(false);
 
@@ -90,10 +95,15 @@ function AudioFilesContextProvider(props: IAudioFileContext) {
       audioGainNode.current.connect(audioCtx.current.destination);
     }
 
+    if (!audioAnalyzerNode.current) {
+      audioAnalyzerNode.current = audioCtx.current.createAnalyser();
+      audioAnalyzerNode.current.connect(audioGainNode.current!);
+    }
+
     // CREATING AUDIO SOURCE NODE AND CONNECTING TO AUDIO GAIN NODE
     audioSourceNode.current?.disconnect();
     audioSourceNode.current = audioCtx.current.createBufferSource();
-    audioSourceNode.current.connect(audioGainNode.current);
+    audioSourceNode.current.connect(audioAnalyzerNode.current!);
 
     // CONVERTING CURRENT TRACK FILE TO ARRAYBUFFER > AUDIOBUFFER & SETTING AUDIOBUFFER AS AUDIOSOURCENODE BUFFER
     currentTrack?.file
@@ -163,6 +173,15 @@ function AudioFilesContextProvider(props: IAudioFileContext) {
     setTrackCurrentTime(seekTo);
   }
 
+  function getFrequencyData(fftSize: number) {
+    audioAnalyzerNode.current!.fftSize = fftSize;
+    const dataArray = new Uint8Array(
+      audioAnalyzerNode.current!.frequencyBinCount
+    );
+    audioAnalyzerNode.current?.getByteFrequencyData(dataArray);
+    return dataArray;
+  }
+
   return (
     <AudioFilesContext.Provider
       value={{
@@ -179,6 +198,7 @@ function AudioFilesContextProvider(props: IAudioFileContext) {
         isPlaying: isPlaying,
         currentTrackLength: currentTrackLength,
         trackCurrentTime: trackCurrentTime,
+        getFrequencyData: getFrequencyData,
       }}
     >
       {props.children}
