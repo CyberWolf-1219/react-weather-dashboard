@@ -1,31 +1,5 @@
-import React, {
-  useState,
-  useRef,
-  useEffect,
-  createContext,
-  ReactNode,
-} from "react";
-
-interface IInitialValue {
-  trackFiles: Array<File> | undefined;
-  currentTrack: { index: number; file: File } | undefined;
-  setAudioFiles: React.Dispatch<React.SetStateAction<Array<File>>> | undefined;
-  setCurrentFile:
-    | React.Dispatch<
-        React.SetStateAction<{ index: number; file: File } | undefined>
-      >
-    | undefined;
-  play: () => void;
-  pause: () => void;
-  next: () => void;
-  previous: () => void;
-  setVolume: (level: number) => void;
-  seekTo: (time: number) => void;
-  isPlaying: boolean;
-  trackCurrentTime: number;
-  currentTrackLength: number;
-  getFrequencyData: (fftSize: number) => Uint8Array;
-}
+import React, { useState, useRef, useEffect, createContext } from "react";
+import { IAudioFileContext, IInitialValue } from "../Declarations/interfaces";
 
 const initialValue: IInitialValue = {
   trackFiles: [],
@@ -48,9 +22,6 @@ const initialValue: IInitialValue = {
 
 const AudioFilesContext = createContext(initialValue);
 
-interface IAudioFileContext {
-  children: ReactNode | ReactNode[];
-}
 // =============================================================================
 function AudioFilesContextProvider(props: IAudioFileContext) {
   const [trackFiles, setTrackFiles] = useState<Array<File>>([]);
@@ -89,20 +60,30 @@ function AudioFilesContextProvider(props: IAudioFileContext) {
     if (!audioCtx.current) {
       audioCtx.current = new AudioContext();
     }
-    // CREATE AUDIO GAIN NODE AND CONNECT TO AUIO DESTINATION
+
+    // CREATE AUDIO GAIN NODE AND CONNECT TO AUDIO DESTINATION
     if (!audioGainNode.current) {
       audioGainNode.current = audioCtx.current.createGain();
       audioGainNode.current.connect(audioCtx.current.destination);
     }
 
+    //  CREATE AUDIO ANALYZER NODE AND CONNECT TO GAIN NODE
     if (!audioAnalyzerNode.current) {
       audioAnalyzerNode.current = audioCtx.current.createAnalyser();
       audioAnalyzerNode.current.connect(audioGainNode.current!);
     }
 
-    // CREATING AUDIO SOURCE NODE AND CONNECTING TO AUDIO GAIN NODE
+    // CREATING AUDIO SOURCE NODE AND CONNECTING TO AUDIO ANALYZER NODE
     audioSourceNode.current?.disconnect();
     audioSourceNode.current = audioCtx.current.createBufferSource();
+    audioSourceNode.current.addEventListener("ended", (e: Event) => {
+      console.log("TRACK ENDED...");
+      audioSourceNode.current!.stop();
+      setIsPlaying(false);
+      setTrackCurrentTime(0);
+      setCurrentTrackLength(0);
+      next();
+    });
     audioSourceNode.current.connect(audioAnalyzerNode.current!);
 
     // CONVERTING CURRENT TRACK FILE TO ARRAYBUFFER > AUDIOBUFFER & SETTING AUDIOBUFFER AS AUDIOSOURCENODE BUFFER
@@ -116,6 +97,7 @@ function AudioFilesContextProvider(props: IAudioFileContext) {
         currentTrackAudioBuffer.current = decodedAudioBuffer; // STORE CURRENT TRACK'S BUFFER FOR SEEKING THE TRACK
         audioSourceNode.current!.buffer = decodedAudioBuffer as AudioBuffer; // SET CURRENT TRACK BUFFER AS SOURCES NODE BUFFER
         setCurrentTrackLength(Math.floor(decodedAudioBuffer!.duration));
+        setTrackCurrentTime(0);
         audioSourceNode.current!.start(0, 0);
         setIsPlaying(true);
       });
@@ -158,19 +140,29 @@ function AudioFilesContextProvider(props: IAudioFileContext) {
   }
 
   function seek(seekTo: number) {
-    console.log(seekTo);
+    setIsPlaying(false);
     // DISCONNECT CURRENT SOURCE NODE
     audioSourceNode.current!.disconnect();
     // CREATE NEW BUFFERSOURCENODE
     audioSourceNode.current = audioCtx.current!.createBufferSource();
+    // ADD FILE END EVENT LISTENER
+    audioSourceNode.current.addEventListener("ended", (e: Event) => {
+      console.log("TRACK ENDED...");
+      audioSourceNode.current!.stop();
+      setIsPlaying(false);
+      setTrackCurrentTime(0);
+      setCurrentTrackLength(0);
+      next();
+    });
     // ADD CURRENT TRACK BUFFER TO SOURCE NODE
     audioSourceNode.current!.buffer = currentTrackAudioBuffer.current!;
     // CONNECTE SOURCE NODE TO AUDIO GAIN NODE
-    audioSourceNode.current.connect(audioGainNode.current!);
+    audioSourceNode.current.connect(audioAnalyzerNode.current!);
     // START TRACK AT SPECIFIED TIME
     audioSourceNode.current!.start(0, seekTo);
     // SET TIME ON CURRENT TIME DISPLAY
     setTrackCurrentTime(seekTo);
+    setIsPlaying(true);
   }
 
   function getFrequencyData(fftSize: number) {

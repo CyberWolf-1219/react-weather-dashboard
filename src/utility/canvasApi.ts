@@ -28,11 +28,9 @@ export default class FrequencyVisualizer {
 
   calculateCircumference(barWidth: number) {
     this.circumference = this.barCount * (barWidth + 2);
-    console.log(this.circumference);
   }
   calculateRadius() {
     this.circleRadius = this.circumference / (2 * Math.PI);
-    console.log(this.circleRadius);
   }
 
   draw(array: Uint8Array) {
