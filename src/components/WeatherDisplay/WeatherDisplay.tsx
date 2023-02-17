@@ -21,7 +21,6 @@ function WeatherDisplay() {
 
     if (conditionCode) {
       const conditionIconsArray = icons[conditionCode];
-      console.log(conditionIconsArray);
       if (today?.is_day) {
         setIcon(conditionIconsArray[0]);
       } else {
